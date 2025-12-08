@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+
+<body class="register-page">
+    <div class="register-card">
+    <div class="text-center mb-3">
+      <!-- Logo -->
+      <img src="image/techshop.png" alt="Ảnh logo" class="logo mb-2">
+      <h3>Tạo tài khoản</h3>
+      <p class="text-muted">Bạn đã có tài khoản? <a href="login.html">Đăng nhập tại đây</a></p>
+    </div>
+
+    <form>
+      <div class="mb-3">
+        <label class="form-label">Tên đăng nhập</label>
+        <input type="text" id="username" class="form-control" placeholder="Nhập tên đăng nhập">
+        <div id="usernameError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Email</label>
+        <input type="email" id="email" class="form-control" placeholder="Nhập email">
+        <div id="emailError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
+      </div>
+
+      <div class="mb-3 d-flex gap-2">
+        <select class="form-select bg-dark text-light" style="max-width: 40%;">
+          <option>Google</option>
+          <option>Facebook</option>
+          <option>Telegram</option>
+        </select>
+        <input type="text" class="form-control" placeholder="Tên của bạn">
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Mât khẩu</label>
+        <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu">
+      </div>
+
+      <div class="form-check mb-3">
+        <input type="checkbox" class="form-check-input" id="terms">
+        <label for="terms" class="form-check-label">Đồng ý với các điều khoản và dịch vụ</label>
+        <div id="termsError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
+      </div>
+
+      <button type="submit" class="btn-gradient">Đăng ký</button>
+      <div id="successMessage" class="text-success mt-2" style="display:none; font-size:0.95rem;"></div>
+    </form>
+  </div>
+
+    <script>
+        const usernameError = document.querySelector("#usernameError");
+        const emailError = document.querySelector("#emailError");
+        const termsError = document.querySelector("#termsError");
+        const successMessage = document.querySelector("#successMessage");
+
+        document.querySelector("form").addEventListener("submit", function(event) {
+        event.preventDefault();
+
+        // Ẩn tất cả thông báo trước
+        usernameError.style.display = emailError.style.display = termsError.style.display = successMessage.style.display = "none";
+
+        // Kiểm tra checkbox
+        if (!document.querySelector("#terms").checked) {
+            termsError.textContent = "Bạn phải đồng ý với các điều khoản để đăng ký!";
+            termsError.style.display = "block";
+            return;
+        }
+
+          const data = {
+              username: document.querySelector("input[placeholder='Nhập tên đăng nhập']").value,
+              email: document.querySelector("input[placeholder='Nhập email']").value,
+              password: document.querySelector("input[placeholder='Nhập mật khẩu']").value
+          };
+
+          fetch("http://localhost:8080/mywed/user/register", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify(data)
+          })
+        .then(res => res.text()) // Service trả về String
+        .then(message => {
+            if(message.includes("thành công")) {
+                successMessage.textContent = message;
+                successMessage.style.display = "block";
+                setTimeout(() => { 
+                    // Chuyển qua trang nhập OTP
+                    window.location.href = "verify-otp.html?email=" + encodeURIComponent(data.email); 
+                }, 1200);
+            } else if(message.includes("Tên đăng nhập")) {
+                usernameError.textContent = message;
+                usernameError.style.display = "block";
+            } else if(message.includes("Email")) {
+                emailError.textContent = message;
+                emailError.style.display = "block";
+            } else {
+                // Nếu lỗi khác
+                successMessage.textContent = message;
+                successMessage.style.display = "block";
+            }
+        })
+        .catch(err => console.error(err));
+        });
+
+        // Ẩn lỗi checkbox khi tick
+        document.querySelector("#terms").addEventListener("change", function() {
+        if (this.checked) termsError.style.display = "none";
+        });
+
+</script>
+
+</body>

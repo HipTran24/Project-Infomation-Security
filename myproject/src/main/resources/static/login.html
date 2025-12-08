@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Register</title>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/js/bootstrap.min.js" integrity="sha384-7qAoOXltbVP82dhxHAUje59V5r2YsVfBafyUDxEdApLPmcdhBPg1DKg1ERo0BZlK" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.7/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-LN+7fdVzj6u52u30Kp6M/trliBMCMKTyK833zpbD+pXdCLuTusPj697FH4R/5mcr" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+
+
+<body class="register-page">
+<div class="register-card">
+    <div class="text-center mb-3">
+        <!-- Logo -->
+        <img src="image/techshop.png" alt="Ảnh logo" class="logo mb-2">
+        <h3>Đăng nhập</h3>
+    </div>
+
+    <form>
+        <div class="mb-3">
+            <label class="form-label">Tên đăng nhập</label>
+            <input type="text" id="username" class="form-control" placeholder="Nhập tên đăng nhập">
+            <div id="usernameError" class="text-danger mt-1" style="display:none; font-size:0.9rem;"></div>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Mât khẩu</label>
+            <input type="password" id="password" class="form-control" placeholder="Nhập mật khẩu">
+        </div>
+
+        <p class="text-muted">Bạn chưa có tài khoản? <a href="register.html">Đăng ký tài khoản</a></p>
+
+        <button type="submit" class="btn-gradient">Đăng nhập</button>
+
+        <div class="changepassword text-center mt-3">
+            <a href="change_password.html">Quên mật khẩu!</a>
+        </div>
+        
+    </form>
+</div>
+
+<script>
+  const usernameError = document.querySelector("#usernameError");
+
+  document.querySelector("form").addEventListener("submit", function(event) {
+    event.preventDefault();
+
+    // Ẩn lỗi trước
+    usernameError.style.display = "none";
+
+    const data = {
+      username: document.querySelector("#username").value,
+      password: document.querySelector("#password").value
+    };
+
+    fetch("http://localhost:8080/mywed/user/login", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data)
+    })
+    .then(res => res.text())
+    .then(message => {
+      if(message.includes("thành công")) {
+        // ✅ Đăng nhập thành công
+        usernameError.textContent = message;
+        usernameError.classList.remove("text-danger");
+        usernameError.classList.add("text-success");
+        usernameError.style.display = "block";
+
+        // Chuyển sang trang chính sau 1 giây
+        setTimeout(() => {
+          window.location.href = "index.html"; 
+        }, 1000);
+
+      } else {
+        // ❌ Lỗi: sai tên đăng nhập hoặc mật khẩu
+        usernameError.textContent = message;
+        usernameError.classList.remove("text-success");
+        usernameError.classList.add("text-danger");
+        usernameError.style.display = "block";
+      }
+    })
+    .catch(err => console.error("Lỗi fetch:", err));
+  });
+</script>
+
+
+</body>

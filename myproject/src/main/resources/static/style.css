@@ -1,0 +1,228 @@
+/* Reset cơ bản */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+.search-box input {
+    width: 360px;   /* tăng từ 220 → 360 */
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background: white;
+    color: white;
+
+}
+
+/* Navbar */
+.navbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 50px;
+    background: linear-gradient(90deg, #000000, #0000FF);
+}
+
+/* =====================
+   PRODUCT CARD
+===================== */
+.card {
+    height: 360px;
+    border-radius: 18px;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-img-top {
+    width: 100%;
+    height: 160px;
+    object-fit: contain;
+    padding: 10px;
+}
+
+.card-body {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+
+.card-title {
+    font-size: 1.1rem;
+    margin-bottom: 6px;
+}
+
+.card-text {
+    font-size: 0.9rem;
+    margin-bottom: 4px;
+}
+
+.product-price {
+    margin-top: auto;
+    font-weight: bold;
+    font-size: 1.1rem;
+    color: #e11d48;
+    text-align: center;
+}
+
+.card-footer {
+    background: transparent;
+    border-top: none;
+    text-align: center;
+}
+
+
+
+.navbar .logo {
+    font-size: 2.4rem;
+    font-weight: bold;
+}
+.image-logo{
+    width: 120px;
+    margin: -10px 0px -10px 10px;
+}
+
+.navbar nav a {
+    margin: 0 15px;
+    text-decoration: none;
+    color: white;
+    font-size: 0.95rem;
+}
+
+.auth-buttons button {
+    margin-left: 10px;
+    padding: 8px 14px;
+    border-radius: 20px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.login {
+    background: transparent;
+    border: 1px solid white;
+    color: white;
+}
+
+.signup {
+    background: white;
+    color: black;
+}
+
+.carousel-item {
+    height: 350px;              /* chiều cao khung */
+}
+
+.carousel-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;        /* ✅ không cắt ảnh */
+    background: #ffffff;           /* nền đen cho phần trống */
+}
+
+.container-gradient {
+    background: linear-gradient(#1b0b3b, #2e0c56, #4b0e7a, #5d0e9a);
+    color: white; /* để chữ nổi bật trên nền tối */
+    padding: 20px 16px;
+    min-height: 460px;
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 40px;
+}
+
+.register-page {
+    background: #0d0f25;
+    min-height: 100vh; /* full màn hình */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.register-card {
+      background: #15172b;
+      border-radius: 15px;
+      padding: 30px;
+      max-width: 400px;
+      width: 100%;
+      box-shadow: 0 0 20px rgba(0,0,0,0.5);
+      color: white;
+    }
+
+.logo {
+    width: 140px;        /* tăng size (100 → 120 hoặc 140) */
+    height: auto;
+    margin-bottom: 12px;
+}
+.logo {
+    width: 140px;
+    height: auto;
+    margin-bottom: 12px;
+
+    /* 🔥 Làm sáng logo */
+    filter: brightness(1.4) contrast(1.2);
+
+    /* 🔥 Tạo glow nhẹ */
+    drop-shadow: 0 0 10px rgba(168, 85, 247, 0.6);
+}
+
+.border {
+    border: none !important;
+}
+
+.register-card h3 {
+      text-align: center;
+      margin-bottom: 20px;
+      font-weight: bold;
+}
+
+.btn-gradient {
+      background: linear-gradient(90deg, #7b2ff7, #f107a3);
+      color: white;
+      border: none;
+      border-radius: 30px;
+      padding: 10px;
+      font-weight: bold;
+      width: 100%;
+}
+
+.btn-gradient:hover {
+      opacity: 0.9;
+}
+.form-label {
+      color: white;
+}
+
+.form-control {
+      background: #1e1f3b;
+      border: none;
+      color: white;
+    }
+
+.form-control::placeholder {
+  color: #bfbfbf;   /* trắng sáng hơn */
+  opacity: 0.6;       /* tránh bị mờ */
+}
+
+.form-control:focus {
+      background: #1e1f3b;
+      box-shadow: 0 0 5px #7b2ff7;
+      color: white;
+    }
+
+a {
+    color: #7b9cff;
+    text-decoration: none;
+    }
+
+a:hover {
+      text-decoration: underline;
+    }
+.text-muted {
+  color: #cccccc !important; /* ép sáng hơn */
+}
+
+
+
+
+
