@@ -56,6 +56,66 @@
     </form>
   </div>
 
+<!--    <script>-->
+<!--        const usernameError = document.querySelector("#usernameError");-->
+<!--        const emailError = document.querySelector("#emailError");-->
+<!--        const termsError = document.querySelector("#termsError");-->
+<!--        const successMessage = document.querySelector("#successMessage");-->
+
+<!--        document.querySelector("form").addEventListener("submit", function(event) {-->
+<!--        event.preventDefault();-->
+
+<!--        // Ẩn tất cả thông báo trước-->
+<!--        usernameError.style.display = emailError.style.display = termsError.style.display = successMessage.style.display = "none";-->
+
+<!--        // Kiểm tra checkbox-->
+<!--        if (!document.querySelector("#terms").checked) {-->
+<!--            termsError.textContent = "Bạn phải đồng ý với các điều khoản để đăng ký!";-->
+<!--            termsError.style.display = "block";-->
+<!--            return;-->
+<!--        }-->
+
+<!--          const data = {-->
+<!--              username: document.querySelector("input[placeholder='Nhập tên đăng nhập']").value,-->
+<!--              email: document.querySelector("input[placeholder='Nhập email']").value,-->
+<!--              password: document.querySelector("input[placeholder='Nhập mật khẩu']").value-->
+<!--          };-->
+
+<!--          fetch("http://localhost:8080/mywed/user/register", {-->
+<!--              method: "POST",-->
+<!--              headers: { "Content-Type": "application/json" },-->
+<!--              body: JSON.stringify(data)-->
+<!--          })-->
+<!--        .then(res => res.text()) // Service trả về String-->
+<!--        .then(message => {-->
+<!--            if(message.includes("thành công")) {-->
+<!--                successMessage.textContent = message;-->
+<!--                successMessage.style.display = "block";-->
+<!--                setTimeout(() => {-->
+<!--                    // Chuyển qua trang nhập OTP-->
+<!--                    window.location.href = "verify-otp.html?email=" + encodeURIComponent(data.email);-->
+<!--                }, 1200);-->
+<!--            } else if(message.includes("Tên đăng nhập")) {-->
+<!--                usernameError.textContent = message;-->
+<!--                usernameError.style.display = "block";-->
+<!--            } else if(message.includes("Email")) {-->
+<!--                emailError.textContent = message;-->
+<!--                emailError.style.display = "block";-->
+<!--            } else {-->
+<!--                // Nếu lỗi khác-->
+<!--                successMessage.textContent = message;-->
+<!--                successMessage.style.display = "block";-->
+<!--            }-->
+<!--        })-->
+<!--        .catch(err => console.error(err));-->
+<!--        });-->
+
+<!--        // Ẩn lỗi checkbox khi tick-->
+<!--        document.querySelector("#terms").addEventListener("change", function() {-->
+<!--        if (this.checked) termsError.style.display = "none";-->
+<!--        });-->
+
+<!--</script>-->
     <script>
         const usernameError = document.querySelector("#usernameError");
         const emailError = document.querySelector("#emailError");
@@ -63,58 +123,87 @@
         const successMessage = document.querySelector("#successMessage");
 
         document.querySelector("form").addEventListener("submit", function(event) {
-        event.preventDefault();
+            event.preventDefault();
 
-        // Ẩn tất cả thông báo trước
-        usernameError.style.display = emailError.style.display = termsError.style.display = successMessage.style.display = "none";
+            // Ẩn tất cả thông báo trước
+            usernameError.style.display = "none";
+            emailError.style.display = "none";
+            termsError.style.display = "none";
+            successMessage.style.display = "none";
 
-        // Kiểm tra checkbox
-        if (!document.querySelector("#terms").checked) {
-            termsError.textContent = "Bạn phải đồng ý với các điều khoản để đăng ký!";
-            termsError.style.display = "block";
-            return;
-        }
-
-          const data = {
-              username: document.querySelector("input[placeholder='Nhập tên đăng nhập']").value,
-              email: document.querySelector("input[placeholder='Nhập email']").value,
-              password: document.querySelector("input[placeholder='Nhập mật khẩu']").value
-          };
-
-          fetch("http://localhost:8080/mywed/user/register", {
-              method: "POST",
-              headers: { "Content-Type": "application/json" },
-              body: JSON.stringify(data)
-          })
-        .then(res => res.text()) // Service trả về String
-        .then(message => {
-            if(message.includes("thành công")) {
-                successMessage.textContent = message;
-                successMessage.style.display = "block";
-                setTimeout(() => { 
-                    // Chuyển qua trang nhập OTP
-                    window.location.href = "verify-otp.html?email=" + encodeURIComponent(data.email); 
-                }, 1200);
-            } else if(message.includes("Tên đăng nhập")) {
-                usernameError.textContent = message;
-                usernameError.style.display = "block";
-            } else if(message.includes("Email")) {
-                emailError.textContent = message;
-                emailError.style.display = "block";
-            } else {
-                // Nếu lỗi khác
-                successMessage.textContent = message;
-                successMessage.style.display = "block";
+            // Kiểm tra checkbox
+            if (!document.querySelector("#terms").checked) {
+                termsError.textContent = "Bạn phải đồng ý với các điều khoản để đăng ký!";
+                termsError.style.display = "block";
+                return;
             }
-        })
-        .catch(err => console.error(err));
+
+            const data = {
+                username: document.querySelector("#username").value,
+                email: document.querySelector("#email").value,
+                password: document.querySelector("#password").value
+            };
+
+            fetch("http://localhost:8080/mywed/user/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify(data)
+            })
+                .then(res => res.text()) // Service trả về String
+                .then(message => {
+                    const msg = message.toLowerCase();
+
+                    // 🔹 1) ĐÃ ĐĂNG KÝ NHƯNG CHƯA XÁC THỰC → NHẢY THẲNG SANG TRANG OTP
+                    if (
+                        msg.includes("chưa xác thực") ||
+                        msg.includes("chua xac thuc") ||
+                        msg.includes("chưa xác minh") ||
+                        msg.includes("otp mới đã được gửi")
+                    ) {
+                        // Không hiện lỗi gì, chuyển thẳng sang verify-otp
+                        window.location.href =
+                            "verify-otp.html?email=" + encodeURIComponent(data.email);
+                        return;
+                    }
+
+                    // 🔹 2) ĐĂNG KÝ MỚI THÀNH CÔNG
+                    if (msg.includes("thành công")) {
+                        successMessage.textContent = message;
+                        successMessage.classList.remove("text-danger");
+                        successMessage.classList.add("text-success");
+                        successMessage.style.display = "block";
+
+                        setTimeout(() => {
+                            window.location.href =
+                                "verify-otp.html?email=" + encodeURIComponent(data.email);
+                        }, 1200);
+
+                        // 🔹 3) TÊN ĐĂNG NHẬP ĐÃ TỒN TẠI
+                    } else if (msg.includes("tên đăng nhập") && msg.includes("tồn tại")) {
+                        usernameError.textContent = message;
+                        usernameError.style.display = "block";
+
+                        // 🔹 4) EMAIL ĐÃ TỒN TẠI (đã xác thực rồi)
+                    } else if (msg.includes("email") && msg.includes("tồn tại")) {
+                        emailError.textContent = message;
+                        emailError.style.display = "block";
+
+                        // 🔹 5) CÁC LỖI KHÁC
+                    } else {
+                        successMessage.textContent = message;
+                        successMessage.classList.remove("text-success");
+                        successMessage.classList.add("text-danger");
+                        successMessage.style.display = "block";
+                    }
+                })
+                .catch(err => console.error(err));
         });
 
         // Ẩn lỗi checkbox khi tick
         document.querySelector("#terms").addEventListener("change", function() {
-        if (this.checked) termsError.style.display = "none";
+            if (this.checked) termsError.style.display = "none";
         });
+    </script>
 
-</script>
 
 </body>
