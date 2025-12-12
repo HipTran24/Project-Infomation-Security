@@ -53,6 +53,7 @@
 		<dependency>
 			<groupId>com.mysql</groupId>
 			<artifactId>mysql-connector-j</artifactId>
+			<version>8.1.0</version>
 			<scope>runtime</scope>
 		</dependency>
 		<dependency>
@@ -63,7 +64,7 @@
 		<dependency>
 			<groupId>org.projectlombok</groupId>
 			<artifactId>lombok</artifactId>
-			<version>1.18.30</version> <!-- hoặc version mới nhất -->
+			<version>1.18.30</version>
 			<scope>provided</scope>
 		</dependency>
 		<dependency>
