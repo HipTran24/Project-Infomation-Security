@@ -81,7 +81,7 @@
               password: document.querySelector("input[placeholder='Nhập mật khẩu']").value
           };
 
-          fetch("http://localhost:8080/mywed/user/register", {
+          fetch("/mywed/user/register", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(data)

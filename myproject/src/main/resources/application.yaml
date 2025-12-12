@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/mydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC&characterEncoding=UTF-8
+    url: jdbc:mysql://localhost:3308/mydb?useSSL=false&allowPublicKeyRetrieval=true&serverTimezone=UTC
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -15,8 +15,8 @@ spring:
   mail:
     host: smtp.gmail.com
     port: 587
-    username: tranthanhhiep8125@gmail.com  # thay bằng email của bạn
-    password: vtwi fmor asnr wale    # App Password (không phải mật khẩu gmail thường)
+    username: tranthanhhiep8125@gmail.com
+    password: vtwi fmor asnr wale
     properties:
       mail:
         smtp:
@@ -34,12 +34,19 @@ spring:
 
 app:
   verify:
-    base-url: http://localhost:8080/mydb/khachhang/verify   # đường dẫn backend hoặc frontend để verify
-    token-expiration-hours: 1                              # token hết hạn sau 24h
+    base-url: http://localhost:8080/mydb/khachhang/verify
+    token-expiration-hours: 1
     max-unverified-days: 1
 
 
 server:
-  port: 8080
+  port: 8443
   servlet:
     context-path: /mywed
+
+  ssl:
+    enabled: true
+    key-store: classpath:keystore.p12
+    key-store-password: 123456
+    key-store-type: PKCS12
+    key-alias: localhost
