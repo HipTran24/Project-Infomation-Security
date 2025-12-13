@@ -54,10 +54,8 @@
             Giỏ hàng
         </button>
 
-        <!-- Đăng nhập -->
-        <a href="login.html" class="ts-auth-btn">
-            Đăng nhập
-        </a>
+        <!-- Đăng xuất -->
+        <a href="login.html" class="ts-auth-btn" onclick="logout()">Đăng xuất</a>
     </div>
 </header>
 
@@ -673,5 +671,45 @@
         });
     });
 </script>
+
+
+<script>
+    /**
+     * Kiểm tra đăng nhập: nếu không có flag auth -> đưa về login
+     * Dùng location.replace để thay thế lịch sử (không cho back truy cập).
+     */
+    (function ensureAuth() {
+        // Nếu muốn token-based, kiểm tra token thay vì flag localStorage
+        const isAuth = localStorage.getItem("auth") === "true";
+        if (!isAuth) {
+            // Replace để không giữ entry này trong history
+            location.replace("login.html");
+        }
+    })();
+
+    // Hàm logout: xóa flags + chuyển về login với replace
+    function logout() {
+        // xóa mọi thứ liên quan auth
+        localStorage.removeItem("auth");
+        localStorage.removeItem("auth_user");
+        sessionStorage.clear();
+
+        // chuyển về login và thay thế lịch sử
+        location.replace("login.html");
+    }
+
+    // Optional: ngăn người dùng dùng "back" để xem nội dung cached
+    // Khi trang được show (kể cả khi back), kiểm tra lại auth và redirect nếu cần.
+    window.addEventListener('pageshow', function (event) {
+        if (localStorage.getItem("auth") !== "true") {
+            // nếu không đăng nhập thì ép về login
+            location.replace("login.html");
+        }
+    });
+</script>
+
+<!-- ví dụ: gán logout vào link -->
+<!-- <a href="#" class="ts-auth-btn" onclick="logout()">Đăng xuất</a> -->
+
 </body>
 </html>

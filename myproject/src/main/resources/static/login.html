@@ -36,54 +36,68 @@
         <div class="changepassword text-center mt-3">
             <a href="change_password.html">Quên mật khẩu!</a>
         </div>
-        
+
     </form>
 </div>
 
 <script>
-  const usernameError = document.querySelector("#usernameError");
+    document.querySelector("form").addEventListener("submit", function (event) {
+        event.preventDefault();
 
-  document.querySelector("form").addEventListener("submit", function(event) {
-    event.preventDefault();
+        const username = document.querySelector("#username").value.trim();
+        const password = document.querySelector("#password").value;
+        const usernameError = document.querySelector("#usernameError");
 
-    // Ẩn lỗi trước
-    usernameError.style.display = "none";
+        // reset lỗi
+        usernameError.style.display = "none";
+        usernameError.classList.remove("text-success", "text-danger");
 
-    const data = {
-      username: document.querySelector("#username").value,
-      password: document.querySelector("#password").value
-    };
+        if (!username || !password) {
+            usernameError.textContent = "Vui lòng nhập đầy đủ thông tin.";
+            usernameError.classList.add("text-danger");
+            usernameError.style.display = "block";
+            return;
+        }
 
-    fetch("/mywed/user/login", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(data)
-    })
-    .then(res => res.text())
-    .then(message => {
-      if(message.includes("thành công")) {
-        // ✅ Đăng nhập thành công
-        usernameError.textContent = message;
-        usernameError.classList.remove("text-danger");
-        usernameError.classList.add("text-success");
-        usernameError.style.display = "block";
+        const data = { username, password };
 
-        // Chuyển sang trang chính sau 1 giây
-        setTimeout(() => {
-          window.location.href = "index.html"; 
-        }, 1000);
+        fetch("/mywed/user/login", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(data)
+        })
+            .then(res => res.text())
+            .then(message => {
+                if (message.toLowerCase().includes("thành công")) {
 
-      } else {
-        // ❌ Lỗi: sai tên đăng nhập hoặc mật khẩu
-        usernameError.textContent = message;
-        usernameError.classList.remove("text-success");
-        usernameError.classList.add("text-danger");
-        usernameError.style.display = "block";
-      }
-    })
-    .catch(err => console.error("Lỗi fetch:", err));
-  });
+                    // ✅ CHỈ set auth khi login thành công
+                    localStorage.setItem("auth", "true");
+                    localStorage.setItem("auth_user", username);
+
+                    usernameError.textContent = message;
+                    usernameError.classList.add("text-success");
+                    usernameError.style.display = "block";
+
+                    // chuyển trang, không cho back lại login
+                    setTimeout(() => {
+                        location.replace("index.html");
+                    }, 800);
+
+                } else {
+                    usernameError.textContent = message;
+                    usernameError.classList.add("text-danger");
+                    usernameError.style.display = "block";
+                }
+            })
+            .catch(err => {
+                console.error("Lỗi fetch:", err);
+                usernameError.textContent = "Không thể kết nối server.";
+                usernameError.classList.add("text-danger");
+                usernameError.style.display = "block";
+            });
+    });
 </script>
+
 
 
 </body>
